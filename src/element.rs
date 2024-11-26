@@ -63,8 +63,13 @@ pub struct Element {
 
 impl Element {
     pub fn new(name: impl ToString, kind: ElementKind) -> Self {
+        let mut name = name.to_string();
+        if kind == ElementKind::Foreign {
+            name = name.to_ascii_lowercase()
+        }
+
         Self {
-            name: name.to_string().to_ascii_lowercase(),
+            name,
             kind,
             attributes: BTreeMap::new(),
             children: vec![],

@@ -112,9 +112,7 @@ element!(portal);
 element!(source, ElementKind::Void);
 
 // SVG and MathML
-// TODO Proper SVG and MathML support
-element!(svg, ElementKind::Foreign);
-element!(math, ElementKind::Foreign);
+// See corresponding modules
 
 // Scripting
 element!(canvas);

@@ -5,14 +5,16 @@
 
 mod check;
 mod element;
-pub mod elements;
+pub mod html;
+pub mod mathml;
 mod render;
+pub mod svg;
 
-pub use self::{element::*, elements::*, render::*};
+pub use self::{element::*, render::*};
 
 #[cfg(test)]
 mod tests {
-    use crate::{elements::*, render::Render, Content, Element};
+    use crate::{html::*, Content, Element, Render};
 
     #[test]
     fn simple_website() {

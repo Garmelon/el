@@ -14,10 +14,13 @@ pub fn is_ascii_alphanumeric(c: char) -> bool {
 /// doesn't give an easy answer. Because of this, we're conservative in what we
 /// allow. This way, the output we produce should parse correctly in a wide
 /// range of circumstances while following the standard.
+///
+/// The `annotation-xml` MathML element requires us to allow dashes in tag
+/// names.
 pub fn is_valid_tag_name(name: &str) -> bool {
     !name.is_empty()
         && name.chars().take(1).all(is_ascii_alpha)
-        && name.chars().all(is_ascii_alphanumeric)
+        && name.chars().all(|c| is_ascii_alphanumeric(c) || c == '-')
 }
 
 /// <https://html.spec.whatwg.org/multipage/syntax.html#syntax-attribute-name>
