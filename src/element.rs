@@ -11,6 +11,7 @@ pub enum ElementKind {
     Normal,
 }
 
+#[derive(Clone)]
 pub enum Content {
     Raw(String),
     Text(String),
@@ -54,6 +55,7 @@ impl From<Element> for Content {
     }
 }
 
+#[derive(Clone)]
 pub struct Element {
     pub name: String,
     pub kind: ElementKind,
@@ -104,6 +106,7 @@ impl Element {
 ///
 /// A `Document(el)` is basically the same as `[Content::doctype(), el.into()]`
 /// for the purposes of the [`crate::Render`] trait.
+#[derive(Clone)]
 pub struct Document(pub Element);
 
 impl From<Element> for Document {
