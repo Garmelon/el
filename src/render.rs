@@ -31,7 +31,7 @@ impl Error {
 
     pub fn at(mut self, index: usize, child: &Content) -> Self {
         self.reverse_path.push(match child {
-            Content::Element(el) => format!("{index}:{}", el.name),
+            Content::Element(el) => format!("{index}[{}]", el.name),
             _ => index.to_string(),
         });
         self
