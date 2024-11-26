@@ -4,6 +4,7 @@ version = "0.0.0"
 edition = "2021"
 
 [dependencies]
+axum = { version = "0.7.9", optional = true }
 
 [lints]
 rust.unsafe_code = { level = "forbid", priority = 1 }

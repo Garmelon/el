@@ -105,3 +105,9 @@ impl Element {
 /// A `Document(el)` is basically the same as `[Content::doctype(), el.into()]`
 /// for the purposes of the [`crate::Render`] trait.
 pub struct Document(pub Element);
+
+impl From<Element> for Document {
+    fn from(value: Element) -> Self {
+        Self(value)
+    }
+}

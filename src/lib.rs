@@ -3,6 +3,8 @@
 //!
 //! [hiccup]: https://github.com/weavejester/hiccup
 
+#[cfg(feature = "axum")]
+mod axum;
 mod check;
 mod element;
 pub mod html;
