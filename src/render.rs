@@ -3,6 +3,7 @@ use std::{error, fmt};
 use crate::{
     check,
     element::{Content, Element, ElementKind},
+    Document,
 };
 
 #[derive(Debug)]
@@ -78,6 +79,14 @@ pub trait Render {
         let mut result = String::new();
         self.render(&mut result)?;
         Ok(result)
+    }
+}
+
+impl Render for Document {
+    fn render<W: fmt::Write>(&self, w: &mut W) -> Result<()> {
+        Content::doctype().render(w)?;
+        self.0.render(w)?;
+        Ok(())
     }
 }
 

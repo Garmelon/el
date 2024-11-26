@@ -99,3 +99,9 @@ impl Element {
         self
     }
 }
+
+/// An HTML document.
+///
+/// A `Document(el)` is basically the same as `[Content::doctype(), el.into()]`
+/// for the purposes of the [`crate::Render`] trait.
+pub struct Document(pub Element);
