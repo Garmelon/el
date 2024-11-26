@@ -90,6 +90,10 @@ impl Element {
         self.attr(name, "")
     }
 
+    pub fn data(self, name: impl ToString, value: impl ToString) -> Self {
+        self.attr(format!("data-{}", name.to_string()), value)
+    }
+
     pub fn child(mut self, child: impl Into<Content>) -> Self {
         self.children.push(child.into());
         self
