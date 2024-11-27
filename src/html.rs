@@ -9,8 +9,8 @@ macro_rules! element {
         element!($name, ElementKind::Normal);
     };
     ( $name:ident, $kind:expr ) => {
-        pub fn $name(component: impl ElementComponent) -> Element {
-            Element::new(stringify!($name), $kind).with(component)
+        pub fn $name(c: impl ElementComponent) -> Element {
+            Element::new(stringify!($name), $kind).with(c)
         }
     };
 }

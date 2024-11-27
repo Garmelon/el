@@ -9,8 +9,8 @@ macro_rules! element {
         element!($name, stringify!($name));
     };
     ( $name:ident, $tag:expr ) => {
-        pub fn $name(component: impl ElementComponent) -> Element {
-            Element::new($tag, ElementKind::Foreign).with(component)
+        pub fn $name(c: impl ElementComponent) -> Element {
+            Element::new($tag, ElementKind::Foreign).with(c)
         }
     };
 }

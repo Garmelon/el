@@ -82,12 +82,12 @@ impl Element {
         Self::new(name, ElementKind::Normal)
     }
 
-    pub fn add(&mut self, component: impl ElementComponent) {
-        component.add_to_element(self);
+    pub fn add(&mut self, c: impl ElementComponent) {
+        c.add_to_element(self);
     }
 
-    pub fn with(mut self, component: impl ElementComponent) -> Self {
-        self.add(component);
+    pub fn with(mut self, c: impl ElementComponent) -> Self {
+        self.add(c);
         self
     }
 }
