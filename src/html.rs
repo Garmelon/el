@@ -2,15 +2,15 @@
 //!
 //! <https://developer.mozilla.org/en-US/docs/Web/HTML/Element>
 
-use crate::{Element, ElementKind};
+use crate::{Element, ElementComponent, ElementKind};
 
 macro_rules! element {
     ( $name:ident ) => {
         element!($name, ElementKind::Normal);
     };
     ( $name:ident, $kind:expr ) => {
-        pub fn $name() -> Element {
-            Element::new(stringify!($name), $kind)
+        pub fn $name(component: impl ElementComponent) -> Element {
+            Element::new(stringify!($name), $kind).with(component)
         }
     };
 }

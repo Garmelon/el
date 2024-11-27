@@ -2,15 +2,15 @@
 //!
 //! <https://developer.mozilla.org/en-US/docs/Web/SVG/Element>
 
-use crate::{Element, ElementKind};
+use crate::{Element, ElementComponent, ElementKind};
 
 macro_rules! element {
     ( $name:ident ) => {
         element!($name, stringify!($name));
     };
     ( $name:ident, $tag:expr ) => {
-        pub fn $name() -> Element {
-            Element::new($tag, ElementKind::Foreign)
+        pub fn $name(component: impl ElementComponent) -> Element {
+            Element::new($tag, ElementKind::Foreign).with(component)
         }
     };
 }

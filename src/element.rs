@@ -1,4 +1,4 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
 
 /// <https://html.spec.whatwg.org/multipage/syntax.html#elements-2>
 #[derive(Clone, Copy, PartialEq, Eq)]
@@ -82,73 +82,150 @@ impl Element {
         Self::new(name, ElementKind::Normal)
     }
 
-    pub fn attr(mut self, name: impl ToString, value: impl ToString) -> Self {
-        self.attributes
-            .insert(name.to_string().to_ascii_lowercase(), value.to_string());
-        self
+    pub fn add(&mut self, component: impl ElementComponent) {
+        component.add_to_element(self);
     }
 
-    pub fn attr_true(self, name: impl ToString) -> Self {
-        self.attr(name, "")
-    }
-
-    pub fn data(self, name: impl ToString, value: impl ToString) -> Self {
-        self.attr(format!("data-{}", name.to_string()), value)
-    }
-
-    pub fn child(mut self, child: impl Into<Content>) -> Self {
-        self.children.push(child.into());
-        self
-    }
-
-    pub fn children(mut self, children: impl AddChildren) -> Self {
-        children.add_children(&mut self.children);
+    pub fn with(mut self, component: impl ElementComponent) -> Self {
+        self.add(component);
         self
     }
 }
 
-pub trait AddChildren {
-    fn add_children(self, children: &mut Vec<Content>);
+pub trait ElementComponent {
+    fn add_to_element(self, element: &mut Element);
 }
 
-impl<T: Into<Content>> AddChildren for T {
-    fn add_children(self, children: &mut Vec<Content>) {
-        children.push(self.into());
+// Attributes
+
+pub struct Attr {
+    name: String,
+    value: String,
+}
+
+impl Attr {
+    pub fn new(name: impl ToString, value: impl ToString) -> Self {
+        Self {
+            name: name.to_string().to_ascii_lowercase(),
+            value: value.to_string(),
+        }
+    }
+
+    pub fn yes(name: impl ToString) -> Self {
+        Self::new(name, "")
+    }
+
+    pub fn id(id: impl ToString) -> Self {
+        Self::new("id", id)
+    }
+
+    pub fn class(class: impl ToString) -> Self {
+        Self::new("class", class)
+    }
+
+    pub fn data(name: impl ToString, value: impl ToString) -> Self {
+        Self::new(format!("data-{}", name.to_string()), value)
     }
 }
 
-impl AddChildren for Vec<Content> {
-    fn add_children(self, children: &mut Vec<Content>) {
-        children.extend(self);
+impl ElementComponent for Attr {
+    fn add_to_element(self, element: &mut Element) {
+        element.attributes.insert(self.name, self.value);
     }
 }
 
-impl<const L: usize> AddChildren for [Content; L] {
-    fn add_children(self, children: &mut Vec<Content>) {
-        children.extend(self);
+impl ElementComponent for HashMap<String, String> {
+    fn add_to_element(self, element: &mut Element) {
+        for (name, value) in self {
+            Attr::new(name, value).add_to_element(element);
+        }
     }
 }
 
-macro_rules! add_children_tuple {
+impl ElementComponent for BTreeMap<String, String> {
+    fn add_to_element(self, element: &mut Element) {
+        for (name, value) in self {
+            Attr::new(name, value).add_to_element(element);
+        }
+    }
+}
+
+// Children
+
+impl<T: Into<Content>> ElementComponent for T {
+    fn add_to_element(self, element: &mut Element) {
+        element.children.push(self.into());
+    }
+}
+
+// Combining components
+
+impl<T: ElementComponent> ElementComponent for Option<T> {
+    fn add_to_element(self, element: &mut Element) {
+        if let Some(component) = self {
+            component.add_to_element(element)
+        }
+    }
+}
+
+impl<T: ElementComponent, E: ElementComponent> ElementComponent for Result<T, E> {
+    fn add_to_element(self, element: &mut Element) {
+        match self {
+            Ok(component) => component.add_to_element(element),
+            Err(component) => component.add_to_element(element),
+        }
+    }
+}
+
+impl<T: ElementComponent> ElementComponent for Vec<T> {
+    fn add_to_element(self, element: &mut Element) {
+        for component in self {
+            component.add_to_element(element);
+        }
+    }
+}
+
+impl<const L: usize, T: ElementComponent> ElementComponent for [T; L] {
+    fn add_to_element(self, element: &mut Element) {
+        for component in self {
+            component.add_to_element(element);
+        }
+    }
+}
+
+// Varargs emulation with tuples
+
+impl ElementComponent for () {
+    fn add_to_element(self, _element: &mut Element) {}
+}
+
+impl<C1: ElementComponent> ElementComponent for (C1,) {
+    fn add_to_element(self, element: &mut Element) {
+        let (c1,) = self;
+        c1.add_to_element(element);
+    }
+}
+
+macro_rules! element_component_tuple {
     ( $( $t:ident ),* ) => {
-        impl <$( $t: AddChildren ),*> AddChildren for ($( $t ),*) {
-            fn add_children(self, children: &mut Vec<Content>) {
+        impl <$( $t: ElementComponent ),*> ElementComponent for ($( $t ),*) {
+            fn add_to_element(self, element: &mut Element) {
                 #[allow(non_snake_case)]
                 let ($( $t ),*) = self;
-                $( $t.add_children(children); )*
+                $( $t.add_to_element(element); )*
             }
         }
     };
 }
 
-add_children_tuple!(C1, C2);
-add_children_tuple!(C1, C2, C3);
-add_children_tuple!(C1, C2, C3, C4);
-add_children_tuple!(C1, C2, C3, C4, C5);
-add_children_tuple!(C1, C2, C3, C4, C5, C6);
-add_children_tuple!(C1, C2, C3, C4, C5, C6, C7);
-add_children_tuple!(C1, C2, C3, C4, C5, C6, C7, C8);
-add_children_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9);
+element_component_tuple!(C1, C2);
+element_component_tuple!(C1, C2, C3);
+element_component_tuple!(C1, C2, C3, C4);
+element_component_tuple!(C1, C2, C3, C4, C5);
+element_component_tuple!(C1, C2, C3, C4, C5, C6);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9);
 
 /// An HTML document.
 ///
