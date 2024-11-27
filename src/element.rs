@@ -66,7 +66,7 @@ pub struct Element {
 impl Element {
     pub fn new(name: impl ToString, kind: ElementKind) -> Self {
         let mut name = name.to_string();
-        if kind == ElementKind::Foreign {
+        if kind != ElementKind::Foreign {
             name = name.to_ascii_lowercase()
         }
 
@@ -106,7 +106,7 @@ pub struct Attr {
 impl Attr {
     pub fn new(name: impl ToString, value: impl ToString) -> Self {
         Self {
-            name: name.to_string().to_ascii_lowercase(),
+            name: name.to_string(),
             value: value.to_string(),
         }
     }
@@ -129,7 +129,10 @@ impl Attr {
 }
 
 impl ElementComponent for Attr {
-    fn add_to_element(self, element: &mut Element) {
+    fn add_to_element(mut self, element: &mut Element) {
+        if element.kind != ElementKind::Foreign {
+            self.name = self.name.to_ascii_lowercase();
+        }
         element.attributes.insert(self.name, self.value);
     }
 }
