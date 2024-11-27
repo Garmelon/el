@@ -100,7 +100,55 @@ impl Element {
         self.children.push(child.into());
         self
     }
+
+    pub fn children(mut self, children: impl AddChildren) -> Self {
+        children.add_children(&mut self.children);
+        self
+    }
 }
+
+pub trait AddChildren {
+    fn add_children(self, children: &mut Vec<Content>);
+}
+
+impl<T: Into<Content>> AddChildren for T {
+    fn add_children(self, children: &mut Vec<Content>) {
+        children.push(self.into());
+    }
+}
+
+impl AddChildren for Vec<Content> {
+    fn add_children(self, children: &mut Vec<Content>) {
+        children.extend(self);
+    }
+}
+
+impl<const L: usize> AddChildren for [Content; L] {
+    fn add_children(self, children: &mut Vec<Content>) {
+        children.extend(self);
+    }
+}
+
+macro_rules! add_children_tuple {
+    ( $( $t:ident ),* ) => {
+        impl <$( $t: AddChildren ),*> AddChildren for ($( $t ),*) {
+            fn add_children(self, children: &mut Vec<Content>) {
+                #[allow(non_snake_case)]
+                let ($( $t ),*) = self;
+                $( $t.add_children(children); )*
+            }
+        }
+    };
+}
+
+add_children_tuple!(C1, C2);
+add_children_tuple!(C1, C2, C3);
+add_children_tuple!(C1, C2, C3, C4);
+add_children_tuple!(C1, C2, C3, C4, C5);
+add_children_tuple!(C1, C2, C3, C4, C5, C6);
+add_children_tuple!(C1, C2, C3, C4, C5, C6, C7);
+add_children_tuple!(C1, C2, C3, C4, C5, C6, C7, C8);
+add_children_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9);
 
 /// An HTML document.
 ///
