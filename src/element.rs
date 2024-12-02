@@ -239,6 +239,14 @@ impl Element {
         self.add(c);
         self
     }
+
+    /// Convert this element into a [`Document`].
+    ///
+    /// This function is equivalent to calling `self.into()` but may be more
+    /// convenient in some cases.
+    pub fn into_document(self) -> Document {
+        self.into()
+    }
 }
 
 /// A component can add itself to an [`Element`] by modifying it.

@@ -49,6 +49,7 @@
 //!         p(("This is an example for a ", em("simple"), " web page.")),
 //!     )),
 //! ))
+//! .into_document()
 //! .render_to_string()
 //! .unwrap();
 //! ```
@@ -80,21 +81,20 @@ pub use self::{element::*, render::*};
 
 #[cfg(test)]
 mod tests {
-    use crate::{html::*, Attr, Content, Element, Render};
+    use crate::{html::*, Attr, Element, Render};
 
     #[test]
     fn simple_website() {
-        let els = [
-            Content::doctype(),
-            html((
-                head(title("Hello")),
-                body((h1("Hello"), p(("Hello ", em("world"), "!")))),
-            ))
-            .into(),
-        ];
+        let page = html((
+            head(title("Hello")),
+            body((h1("Hello"), p(("Hello ", em("world"), "!")))),
+        ))
+        .into_document()
+        .render_to_string()
+        .unwrap();
 
         assert_eq!(
-            els.render_to_string().unwrap(),
+            page,
             concat!(
                 "<!DOCTYPE html><html>",
                 "<head><title>Hello</title></head>",

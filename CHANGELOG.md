@@ -20,6 +20,7 @@ A dependency update to an incompatible version is considered a breaking change.
 ### Added
 
 - JS helper function to readme
+- `Element::into_document`
 
 ## v0.1.0 - 2024-12-02
 

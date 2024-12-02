@@ -25,6 +25,7 @@ let page: String = html((
         p(("This is an example for a ", em("simple"), " web page.")),
     )),
 ))
+.into_document()
 .render_to_string()
 .unwrap();
 ```
