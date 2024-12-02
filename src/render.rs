@@ -36,19 +36,41 @@ impl Error {
         });
         self
     }
+
+    /// A human-readable path from the topmost element to the element that
+    /// caused the error.
+    ///
+    /// The path consists of elements of the form `index(tagname)` or `index`,
+    /// depending on whether the [`Content`] at that position is a
+    /// [`Content::Element`] or not.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use el::{Render, html::*};
+    /// let result = form(("greeting: ", input("hello"))).render_to_string();
+    /// assert!(result.is_err()); // <input> is a void element
+    /// assert_eq!(result.unwrap_err().path(), "/1(input)/0");
+    /// ```
+    pub fn path(&self) -> String {
+        if self.reverse_path.is_empty() {
+            return "/".to_string();
+        }
+
+        self.reverse_path
+            .iter()
+            .rev()
+            .map(|(index, name)| match name {
+                Some(name) => format!("/{index}({name})"),
+                None => format!("/{index}"),
+            })
+            .collect::<String>()
+    }
 }
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let path = self
-            .reverse_path
-            .iter()
-            .rev()
-            .map(|s| s as &str)
-            .collect::<Vec<_>>()
-            .join(".");
-
-        write!(f, "Render error at {path}: ")?;
+        write!(f, "Render error at {}: ", self.path())?;
 
         match &self.cause {
             ErrorCause::Format(error) => write!(f, "{error}")?,
