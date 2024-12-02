@@ -1,6 +1,5 @@
-//! Definitions for all non-deprecated HTML elements.
-//!
-//! <https://developer.mozilla.org/en-US/docs/Web/HTML/Element>
+//! Definitions for all non-deprecated HTML elements
+//! ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)).
 
 use crate::{Element, ElementComponent, ElementKind};
 
@@ -9,6 +8,8 @@ macro_rules! element {
         element!($name, ElementKind::Normal);
     };
     ( $name:ident, $kind:expr ) => {
+        #[doc = concat!("The `<", stringify!($name), ">` tag")]
+        #[doc = concat!("([MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/", stringify!($name), ")).")]
         pub fn $name(c: impl ElementComponent) -> Element {
             Element::new(stringify!($name), $kind).with(c)
         }

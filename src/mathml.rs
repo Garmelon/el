@@ -1,6 +1,5 @@
-//! Definitions for all non-deprecated MathML elements.
-//!
-//! <https://developer.mozilla.org/en-US/docs/Web/MathML/Element>
+//! Definitions for all non-deprecated MathML elements
+//! ([MDN](https://developer.mozilla.org/en-US/docs/Web/MathML/Element)).
 
 use crate::{Element, ElementComponent, ElementKind};
 
@@ -9,6 +8,8 @@ macro_rules! element {
         element!($name, stringify!($name));
     };
     ( $name:ident, $tag:expr ) => {
+        #[doc = concat!("The `<", $tag, ">` tag")]
+        #[doc = concat!("([MDN](https://developer.mozilla.org/en-US/docs/Web/MathML/Element/", $tag, ")).")]
         pub fn $name(c: impl ElementComponent) -> Element {
             Element::new($tag, ElementKind::Foreign).with(c)
         }
