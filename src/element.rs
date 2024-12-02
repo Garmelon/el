@@ -468,6 +468,13 @@ element_component_tuple!(C1, C2, C3, C4, C5, C6);
 element_component_tuple!(C1, C2, C3, C4, C5, C6, C7);
 element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8);
 element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15);
+element_component_tuple!(C1, C2, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16);
 
 /// A full HTML document including doctype.
 ///
