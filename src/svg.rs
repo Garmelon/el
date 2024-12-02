@@ -80,5 +80,5 @@ element!(text);
 element!(text_path, "textPath");
 element!(title);
 element!(tspan);
-element!(r#use);
+element!(r#use, "use");
 element!(view);
