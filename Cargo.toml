@@ -2,6 +2,12 @@
 name = "el"
 version = "0.0.0"
 edition = "2021"
+authors = ["Garmelon <garmelon@plugh.de>"]
+description = "Write and manipulate HTML elements as data"
+repository = "https://github.com/Garmelon/el"
+license = "MIT OR Apache-2.0"
+keywords = ["html", "svg", "mathml", "hiccup"]
+categories = ["web-programming", "template-engine"]
 
 [dependencies]
 axum = { version = "0.7.9", optional = true }

@@ -28,3 +28,10 @@ let page: String = html((
 .render_to_string()
 .unwrap();
 ```
+
+## License
+
+This entire project is dual-licensed under the [Apache 2.0] and [MIT] licenses.
+
+[Apache 2.0]: LICENSE-APACHE
+[MIT]: LICENSE-MIT
