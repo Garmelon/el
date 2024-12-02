@@ -6,33 +6,42 @@ use crate::{
     Document,
 };
 
+/// The cause of an [`Error`].
 #[derive(Debug)]
 pub enum ErrorCause {
+    /// An error occurred while formatting a value.
     Format(fmt::Error),
-    InvalidTagName(String),
-    InvalidAttrName(String),
+    /// A name is not a valid tag name.
+    InvalidTagName { name: String },
+    /// A name is not a valid attribute name.
+    InvalidAttrName { name: String },
+    /// A child is in a place where it is not allowed (e.g. it is the child of a
+    /// [`ElementKind::Void`] element).
     InvalidChild,
-    InvalidRawText(String),
+    /// Text inside a [`ElementKind::RawText`] element contains forbidden
+    /// structures.
+    InvalidRawText { text: String },
 }
 
+/// An error that can occur during element rendering.
 #[derive(Debug)]
 pub struct Error {
-    reverse_path: Vec<String>,
+    reverse_path: Vec<(usize, Option<String>)>,
     cause: ErrorCause,
 }
 
 impl Error {
-    pub fn new(cause: ErrorCause) -> Self {
+    pub(crate) fn new(cause: ErrorCause) -> Self {
         Self {
             reverse_path: vec![],
             cause,
         }
     }
 
-    pub fn at(mut self, index: usize, child: &Content) -> Self {
+    pub(crate) fn at(mut self, index: usize, child: &Content) -> Self {
         self.reverse_path.push(match child {
-            Content::Element(el) => format!("{index}[{}]", el.name),
-            _ => index.to_string(),
+            Content::Element(el) => (index, Some(el.name.clone())),
+            _ => (index, None),
         });
         self
     }
@@ -66,6 +75,11 @@ impl Error {
             })
             .collect::<String>()
     }
+
+    /// The cause of the error.
+    pub fn cause(&self) -> &ErrorCause {
+        &self.cause
+    }
 }
 
 impl fmt::Display for Error {
@@ -74,10 +88,10 @@ impl fmt::Display for Error {
 
         match &self.cause {
             ErrorCause::Format(error) => write!(f, "{error}")?,
-            ErrorCause::InvalidTagName(name) => write!(f, "Invalid tag name {name:?}")?,
-            ErrorCause::InvalidAttrName(name) => write!(f, "Invalid attribute name {name:?}")?,
+            ErrorCause::InvalidTagName { name } => write!(f, "Invalid tag name {name:?}")?,
+            ErrorCause::InvalidAttrName { name } => write!(f, "Invalid attribute name {name:?}")?,
             ErrorCause::InvalidChild => write!(f, "Invalid child")?,
-            ErrorCause::InvalidRawText(text) => write!(f, "Invalid raw text {text:?}")?,
+            ErrorCause::InvalidRawText { text } => write!(f, "Invalid raw text {text:?}")?,
         }
 
         Ok(())
@@ -92,11 +106,20 @@ impl From<fmt::Error> for Error {
     }
 }
 
+/// A wrapper around [`std::result::Result`] with the error [`Error`].
 pub type Result<T> = std::result::Result<T, Error>;
 
+/// Render an [`Element`] or a [`Document`] to a [`fmt::Write`]; usually a
+/// [`String`].
+///
+/// To implement this trait, only [`Self::render`] needs to be implemented.
 pub trait Render {
+    /// Render to a writer.
     fn render<W: fmt::Write>(&self, w: &mut W) -> Result<()>;
 
+    /// Render directly to a [`String`].
+    ///
+    /// This method is implemented by default and uses [`Self::render`].
     fn render_to_string(&self) -> Result<String> {
         let mut result = String::new();
         self.render(&mut result)?;
@@ -137,11 +160,15 @@ impl Render for Element {
     fn render<W: fmt::Write>(&self, w: &mut W) -> Result<()> {
         // Checks
         if !check::is_valid_tag_name(&self.name) {
-            return Err(Error::new(ErrorCause::InvalidTagName(self.name.clone())));
+            return Err(Error::new(ErrorCause::InvalidTagName {
+                name: self.name.clone(),
+            }));
         }
         for name in self.attributes.keys() {
             if !check::is_valid_attribute_name(name) {
-                return Err(Error::new(ErrorCause::InvalidAttrName(name.clone())));
+                return Err(Error::new(ErrorCause::InvalidAttrName {
+                    name: name.clone(),
+                }));
             }
         }
 
@@ -174,9 +201,9 @@ impl Render for Element {
                     Content::Text(text) if check::is_valid_raw_text(&self.name, text) => {
                         write!(w, "{text}").map_err(|e| e.into())
                     }
-                    Content::Text(text) => {
-                        Err(Error::new(ErrorCause::InvalidRawText(text.clone())))
-                    }
+                    Content::Text(text) => Err(Error::new(ErrorCause::InvalidRawText {
+                        text: text.clone(),
+                    })),
                     _ => Err(Error::new(ErrorCause::InvalidChild)),
                 },
                 ElementKind::EscapableRawText => match child {
