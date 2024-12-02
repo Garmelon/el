@@ -17,6 +17,10 @@ A dependency update to an incompatible version is considered a breaking change.
 
 ## Unreleased
 
+### Added
+
+- Eponymous JS helper function in readme
+
 ## v0.1.0 - 2024-12-02
 
 Initial release
