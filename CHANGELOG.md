@@ -16,3 +16,7 @@ A dependency update to an incompatible version is considered a breaking change.
 7. Publish new version of the crate
 
 ## Unreleased
+
+## v0.1.0 - 2024-12-02
+
+Initial release
