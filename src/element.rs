@@ -87,6 +87,12 @@ impl Content {
 
 impl From<String> for Content {
     fn from(value: String) -> Self {
+        Self::Text(value)
+    }
+}
+
+impl From<&String> for Content {
+    fn from(value: &String) -> Self {
         Self::text(value)
     }
 }

@@ -20,6 +20,7 @@ A dependency update to an incompatible version is considered a breaking change.
 ### Added
 
 - `Element::into_document`
+- `impl From<&String> for Content`
 - Eponymous JS helper function in readme
 
 ## v0.1.0 - 2024-12-02
