@@ -6,7 +6,7 @@ A dependency update to an incompatible version is considered a breaking change.
 
 ## Releasing a new version
 
-0. Ensure tests don't fail *ahem*
+0. Ensure tests don't fail
 1. Update dependencies in a separate commit, if necessary
 2. Set new version number in [`Cargo.toml`](Cargo.toml)
 3. Add new section in this changelog
@@ -16,6 +16,8 @@ A dependency update to an incompatible version is considered a breaking change.
 7. Publish new version of the crate
 
 ## Unreleased
+
+## v0.1.1 - 2024-12-08
 
 ### Added
 
