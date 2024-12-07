@@ -1,12 +1,12 @@
 # el
 
-`el` is a Rust library for writing, modifying, and safely rendering HTML
-elements as simple data structures. It is inspired by [hiccup] and named after a
-small helper function I once wrote in JS.
+`el` is a no-dependencies Rust library for writing, modifying, and safely
+rendering HTML elements as simple data structures. It is inspired by [hiccup]
+and named after a small helper function I once wrote in JS.
 
 [hiccup]: https://github.com/weavejester/hiccup
 
-## Usage example
+## Show me a simple example
 
 ```rs
 use el::{Attr, Render, html::*};
@@ -29,6 +29,10 @@ let page: String = html((
 .render_to_string()
 .unwrap();
 ```
+
+## What now?
+
+See the top-level crate documentation for more info.
 
 ## But what about that small helper function?
 

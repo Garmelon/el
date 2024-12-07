@@ -67,6 +67,10 @@
 //! ```
 //!
 //! [axum]: https://crates.io/crates/axum
+//!
+//! ## But what about that small helper function?
+//!
+//! See the readme for more details.
 
 #[cfg(feature = "axum")]
 mod axum;
