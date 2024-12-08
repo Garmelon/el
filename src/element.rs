@@ -340,7 +340,7 @@ impl Attr {
         Self::new("id", id)
     }
 
-    /// Create (or append) to a `class` attribute.
+    /// Create (or append to) a `class` attribute.
     ///
     /// `Attr::class(class)` is equivalent to
     /// `Attr::append("class", class, " ")`.
@@ -348,7 +348,7 @@ impl Attr {
         Self::append("class", class, " ")
     }
 
-    /// Create (or append) to a `style` attribute.
+    /// Create (or append to) a `style` attribute.
     ///
     /// `Attr::style(style)` is equivalent to
     /// `Attr::append("style", style, ";")`.
