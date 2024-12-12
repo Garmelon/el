@@ -37,15 +37,14 @@
 //!
 //! let page: String = html((
 //!     head((
-//!         meta(Attr::new("charset", "utf-8")),
 //!         meta((
-//!             Attr::new("name", "viewport"),
-//!             Attr::new("content", "width=device-width, initial-scale=1"),
+//!             attr::name("viewport"),
+//!             attr::content("width=device-width, initial-scale=1"),
 //!         )),
 //!         title("Example page"),
 //!     )),
 //!     body((
-//!         h1((Attr::id("heading"), "Example page")),
+//!         h1((attr::id("heading"), "Example page")),
 //!         p(("This is an example for a ", em("simple"), " web page.")),
 //!     )),
 //! ))
@@ -151,9 +150,9 @@ mod tests {
         assert_eq!(
             input((
                 Attr::set("name", "tentacles"),
-                Attr::set("type", "number"),
-                Attr::set("min", 10),
-                Attr::set("max", 100),
+                attr::TypeInput::Number,
+                attr::min(10),
+                Attr::append("max", 100, "FOOBAA"),
             ))
             .render_to_string()
             .unwrap(),
@@ -166,6 +165,18 @@ mod tests {
                 .unwrap(),
             r#"<input checked name="horns">"#,
         );
+
+        assert_eq!(
+            p((
+                attr::id("foo"),
+                attr::id("bar"),
+                attr::class("foo"),
+                attr::class("bar"),
+            ))
+            .render_to_string()
+            .unwrap(),
+            r#"<p class="foo bar" id="bar"></p>"#,
+        )
     }
 
     #[test]

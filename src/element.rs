@@ -346,6 +346,7 @@ impl Attr {
     /// Create (or replace) an `id` attribute.
     ///
     /// `Attr::id(id)` is equivalent to `Attr::new("id", id)`.
+    #[deprecated = "use `html::attr::id` instead"]
     pub fn id(id: impl ToString) -> Self {
         Self::set("id", id)
     }
@@ -354,6 +355,7 @@ impl Attr {
     ///
     /// `Attr::class(class)` is equivalent to
     /// `Attr::append("class", class, " ")`.
+    #[deprecated = "use `html::attr::class` instead"]
     pub fn class(class: impl ToString) -> Self {
         Self::append("class", class, " ")
     }
@@ -362,6 +364,7 @@ impl Attr {
     ///
     /// `Attr::style(style)` is equivalent to
     /// `Attr::append("style", style, ";")`.
+    #[deprecated = "use `html::attr::style` instead"]
     pub fn style(style: impl ToString) -> Self {
         Self::append("style", style, ";")
     }
@@ -372,6 +375,7 @@ impl Attr {
     /// `Attr::new(format!("data-{name}"), value)`.
     ///
     /// [mdn]: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*
+    #[deprecated = "use `html::attr::data_x` instead"]
     pub fn data(name: impl ToString, value: impl ToString) -> Self {
         Self::set(format!("data-{}", name.to_string()), value)
     }

@@ -20,10 +20,15 @@ A dependency update to an incompatible version is considered a breaking change.
 ### Added
 
 - `Attr::set`
+- `html::attr`
 
 ### Deprecated
 
 - `Attr::new` in favor of `Attr::set`
+- `Attr::id` in favor of `html::attr::id`
+- `Attr::class` in favor of `html::attr::class`
+- `Attr::style` in favor of `html::attr::style`
+- `Attr::data` in favor of `html::attr::data_x`
 
 ## v0.1.1 - 2024-12-08
 

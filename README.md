@@ -13,15 +13,14 @@ use el::{Attr, Render, html::*};
 
 let page: String = html((
     head((
-        meta(Attr::new("charset", "utf-8")),
         meta((
-            Attr::new("name", "viewport"),
-            Attr::new("content", "width=device-width, initial-scale=1"),
+            attr::name("viewport"),
+            attr::content("width=device-width, initial-scale=1"),
         )),
         title("Example page"),
     )),
     body((
-        h1((Attr::id("heading"), "Example page")),
+        h1((attr::id("heading"), "Example page")),
         p(("This is an example for a ", em("simple"), " web page.")),
     )),
 ))
@@ -53,12 +52,11 @@ Use it like so:
 ```js
 const page = el("html", {},
   el("head", {},
-    el("meta", { charset: "utf-8" }),
     el("meta", {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
+      name: "viewport",
+      content: "width=device-width, initial-scale=1",
     }),
-    el("title", {}, "Example page")
+    el("title", {}, "Example page"),
   ),
   el("body", {},
     el("h1", { id: "heading" }, "Example page"),

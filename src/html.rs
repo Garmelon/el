@@ -1,5 +1,9 @@
-//! Definitions for all non-deprecated HTML elements
+//! Definitions for HTML elements and attributes
 //! ([MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)).
+//!
+//! Deprecated HTML elements are not included.
+
+pub mod attr;
 
 use crate::{Element, ElementComponent, ElementKind};
 
