@@ -17,6 +17,14 @@ A dependency update to an incompatible version is considered a breaking change.
 
 ## Unreleased
 
+### Added
+
+- `Attr::set`
+
+### Deprecated
+
+- `Attr::new` in favor of `Attr::set`
+
 ## v0.1.1 - 2024-12-08
 
 ### Added

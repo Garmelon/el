@@ -150,10 +150,10 @@ mod tests {
     fn attributes() {
         assert_eq!(
             input((
-                Attr::new("name", "tentacles"),
-                Attr::new("type", "number"),
-                Attr::new("min", 10),
-                Attr::new("max", 100),
+                Attr::set("name", "tentacles"),
+                Attr::set("type", "number"),
+                Attr::set("min", 10),
+                Attr::set("max", 100),
             ))
             .render_to_string()
             .unwrap(),
@@ -161,7 +161,7 @@ mod tests {
         );
 
         assert_eq!(
-            input((Attr::new("name", "horns"), Attr::yes("checked")))
+            input((Attr::set("name", "horns"), Attr::yes("checked")))
                 .render_to_string()
                 .unwrap(),
             r#"<input checked name="horns">"#,
@@ -172,7 +172,7 @@ mod tests {
     fn always_lowercase() {
         assert_eq!(
             Element::normal("HTML")
-                .with(Attr::new("LANG", "EN"))
+                .with(Attr::set("LANG", "EN"))
                 .render_to_string()
                 .unwrap(),
             r#"<html lang="EN"></html>"#,

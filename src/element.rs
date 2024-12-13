@@ -301,12 +301,22 @@ impl Attr {
     /// When this attribute is added to an [`Element`] through
     /// [`ElementComponent::add_to_element`] and an attribute of the same name
     /// already exists, it replaces that attribute's value.
-    pub fn new(name: impl ToString, value: impl ToString) -> Self {
+    pub fn set(name: impl ToString, value: impl ToString) -> Self {
         Self {
             name: name.to_string(),
             value: value.to_string(),
             append_by: None,
         }
+    }
+
+    /// Create or replace an attribute.
+    ///
+    /// When this attribute is added to an [`Element`] through
+    /// [`ElementComponent::add_to_element`] and an attribute of the same name
+    /// already exists, it replaces that attribute's value.
+    #[deprecated = "use `Attr::set` instead"]
+    pub fn new(name: impl ToString, value: impl ToString) -> Self {
+        Self::set(name, value)
     }
 
     /// Create or append to an attribute.
@@ -330,14 +340,14 @@ impl Attr {
     /// When rendering an empty attribute as HTML, the value can be omitted:
     /// `name=""` is equivalent to just `name`.
     pub fn yes(name: impl ToString) -> Self {
-        Self::new(name, "")
+        Self::set(name, "")
     }
 
     /// Create (or replace) an `id` attribute.
     ///
     /// `Attr::id(id)` is equivalent to `Attr::new("id", id)`.
     pub fn id(id: impl ToString) -> Self {
-        Self::new("id", id)
+        Self::set("id", id)
     }
 
     /// Create (or append to) a `class` attribute.
@@ -363,7 +373,7 @@ impl Attr {
     ///
     /// [mdn]: https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/data-*
     pub fn data(name: impl ToString, value: impl ToString) -> Self {
-        Self::new(format!("data-{}", name.to_string()), value)
+        Self::set(format!("data-{}", name.to_string()), value)
     }
 }
 
@@ -393,7 +403,7 @@ impl ElementComponent for Attr {
 impl ElementComponent for HashMap<String, String> {
     fn add_to_element(self, element: &mut Element) {
         for (name, value) in self {
-            Attr::new(name, value).add_to_element(element);
+            Attr::set(name, value).add_to_element(element);
         }
     }
 }
@@ -401,7 +411,7 @@ impl ElementComponent for HashMap<String, String> {
 impl ElementComponent for BTreeMap<String, String> {
     fn add_to_element(self, element: &mut Element) {
         for (name, value) in self {
-            Attr::new(name, value).add_to_element(element);
+            Attr::set(name, value).add_to_element(element);
         }
     }
 }
