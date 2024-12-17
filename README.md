@@ -9,7 +9,7 @@ and named after a small helper function I once wrote in JS.
 ## Show me a simple example
 
 ```rs
-use el::{Attr, Render, html::*};
+use el::{Render, html::*};
 
 let page: String = html((
     head((

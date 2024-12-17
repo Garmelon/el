@@ -33,7 +33,7 @@
 //! ## Usage example
 //!
 //! ```
-//! use el::{Attr, Render, html::*};
+//! use el::{Render, html::*};
 //!
 //! let page: String = html((
 //!     head((
