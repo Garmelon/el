@@ -107,6 +107,35 @@ macro_rules! attr_enum {
             }
         }
     };
+    (
+        $name:ident as $article:ident $actual:expr, separated by $separator:expr;
+        at $url:expr;
+        $( $valname:ident => $valstr:expr, )*
+    ) => {
+        #[doc = concat!("Create (or append to) ", stringify!($article), " `", $actual, "` attribute")]
+        #[doc = concat!("(", $url, ").")]
+        #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+        pub enum $name {
+            $(
+                #[doc = concat!("The value `", stringify!($valstr), "`.")]
+                $valname,
+            )*
+        }
+
+        impl fmt::Display for $name {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                match self {
+                    $( Self::$valname => $valstr.fmt(f), )*
+                }
+            }
+        }
+
+        impl ElementComponent for $name {
+            fn add_to_element(self, element: &mut Element) {
+                Attr::append($actual, self, $separator).add_to_element(element);
+            }
+        }
+    };
 }
 
 ////////////////
@@ -755,6 +784,40 @@ attr_enum! {
     StrictOrigin => "strict-origin",
     StrictOriginWhenCrossOrigin => "strict-origin-when-cross-origin",
     UnsafeUrl => "unsafe-url",
+}
+
+attr_enum! {
+    Rel as a "rel", separated by " ";
+    at url!(normal, "rel");
+    Alternate => "alternate",
+    Author => "author",
+    Bookmark => "bookmark",
+    Canonical => "canonical",
+    DnsPrefetch => "dns-prefetch",
+    External => "external",
+    Expect => "expect",
+    Help => "help",
+    Icon => "icon",
+    License => "license",
+    Manifest => "manifest",
+    Me => "me",
+    Modulepreload => "modulepreload",
+    Next => "next",
+    Nofollow => "nofollow",
+    Noopener => "noopener",
+    Noreferrer => "noreferrer",
+    Opener => "opener",
+    Pingback => "pingback",
+    Preconnect => "preconnect",
+    Prefetch => "prefetch",
+    Preload => "preload",
+    Prerender => "prerender",
+    Prev => "prev",
+    PrivacyPolicy => "privacy-policy",
+    Search => "search",
+    Stylesheet => "stylesheet",
+    Tag => "tag",
+    TermsOfService => "terms-of-service",
 }
 
 attr_append! {
