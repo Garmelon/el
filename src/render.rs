@@ -246,6 +246,8 @@ fn render_text<W: fmt::Write>(w: &mut W, text: &str) -> Result<()> {
 }
 
 fn render_comment<W: fmt::Write>(w: &mut W, text: &str) -> Result<()> {
+    write!(w, "<!--")?;
+
     // A comment...
     // - must not start with the string ">"
     // - must not start with the string "->"
@@ -269,6 +271,7 @@ fn render_comment<W: fmt::Write>(w: &mut W, text: &str) -> Result<()> {
         write!(w, " ")?;
     }
 
+    write!(w, "-->")?;
     Ok(())
 }
 

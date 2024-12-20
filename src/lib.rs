@@ -84,7 +84,7 @@ pub use self::{element::*, render::*};
 
 #[cfg(test)]
 mod tests {
-    use crate::{html::*, Attr, Element, Render};
+    use crate::{html::*, Attr, Content, Element, Render};
 
     #[test]
     fn simple_website() {
@@ -187,6 +187,28 @@ mod tests {
                 .render_to_string()
                 .unwrap(),
             r#"<html lang="EN"></html>"#,
+        );
+    }
+
+    #[test]
+    fn comments() {
+        assert_eq!(
+            html(("<!--abc--> ", Content::comment("abc")))
+                .render_to_string()
+                .unwrap(),
+            r#"<html>&lt;!--abc--&gt; <!--abc--></html>"#,
+        );
+
+        assert_eq!(
+            html(Content::comment("Hello <!-- world -->!"))
+                .render_to_string()
+                .unwrap(),
+            r#"<html><!--Hello <!== world ==>!--></html>"#,
+        );
+
+        assert_eq!(
+            html(Content::comment("-><!-")).render_to_string().unwrap(),
+            r#"<html><!-- -><!- --></html>"#,
         );
     }
 }

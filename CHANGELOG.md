@@ -21,6 +21,10 @@ A dependency update to an incompatible version is considered a breaking change.
 
 - `html::attr::Rel`
 
+### Fixed
+
+- Rendering of HTML comments
+
 ## v0.1.2 - 2024-12-14
 
 ### Added
