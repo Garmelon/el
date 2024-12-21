@@ -17,6 +17,8 @@ A dependency update to an incompatible version is considered a breaking change.
 
 ## Unreleased
 
+## v0.1.3 - 2024-12-21
+
 ### Added
 
 - `html::attr::Rel`
