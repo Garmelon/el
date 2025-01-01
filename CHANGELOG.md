@@ -20,6 +20,7 @@ A dependency update to an incompatible version is considered a breaking change.
 ### Changed
 
 - **(breaking)** Updated `axum-core` dependency to `0.5.0`
+- Relaxed lower bound on `http` dependency to `1.0.0`
 
 ## v0.1.3 - 2024-12-21
 
