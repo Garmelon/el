@@ -17,6 +17,8 @@ A dependency update to an incompatible version is considered a breaking change.
 
 ## Unreleased
 
+## v0.2.0 - 2025-01-01
+
 ### Changed
 
 - **(breaking)** Updated `axum-core` dependency to `0.5.0`

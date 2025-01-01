@@ -1,6 +1,6 @@
 [package]
 name = "el"
-version = "0.1.3"
+version = "0.2.0"
 edition = "2021"
 authors = ["Garmelon <garmelon@plugh.de>"]
 description = "Write and manipulate HTML elements as data"
