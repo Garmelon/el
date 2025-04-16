@@ -35,7 +35,7 @@ See the top-level crate documentation for more info.
 
 ## But what about that small helper function?
 
-Here it is in full, for posteriority:
+Here it is in full, for posterity:
 
 ```js
 function el(name, attributes, ...children) {
