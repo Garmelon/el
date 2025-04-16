@@ -58,10 +58,9 @@ pub fn is_valid_raw_text(tag_name: &str, text: &str) -> bool {
         // "[...] followed by characters that case-insensitively match the tag
         // name of the element [...]"
         //
-        // Note: Since we know that tag names are ascii-only, we can convert
-        // both to lowercase for a case-insensitive comparison without weird
-        // unicode shenanigans.
-        if potential_tag_name.to_ascii_lowercase() != tag_name.to_ascii_lowercase() {
+        // Note: Since we know that tag names are ascii-only, we can use an
+        // ASCII-based case insensitive comparison without unicode shenanigans.
+        if !potential_tag_name.eq_ignore_ascii_case(tag_name) {
             continue;
         }
 
